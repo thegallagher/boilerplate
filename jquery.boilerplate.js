@@ -52,7 +52,8 @@
                 if (aguments.length = 1) {
                     return this.options[options];
                 } else {
-                    options = {aguments[0]: aguments[1]};
+                    options = {};
+                    options[aguments[0]] = aguments[1];
                 }
             }
             $.extend(this.options, options);
@@ -72,7 +73,7 @@
         if (options === undefined || typeof options === 'object') {
             return this.each(function () {
                 if (!$.data(this, 'plugin_' + pluginName)) {
-                    $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
+                    $.data(this, 'plugin_' + pluginName, new Plugin(this, options));
                 }
             });
         } else if (typeof options === 'string' && options[0] !== '_') {
