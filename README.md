@@ -1,4 +1,6 @@
-# jQuery Boilerplate
+# jQuery Boilerplate (modified)
+
+This version has been modifed to suite my own preferences.
 
 ### A boilerplate for jump-starting jQuery plugins development.
 

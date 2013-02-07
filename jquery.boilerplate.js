@@ -19,13 +19,13 @@
     // minified (especially when both are regularly referenced in your plugin).
 
     // Create the defaults once
-    var pluginName = "defaultPluginName";
+    var pluginName = 'defaultPluginName';
     var defaults = {
-        propertyName: "value"
+        propertyName: 'value'
     };
 
     // The actual plugin constructor
-    function Plugin(element, options) {
+    var Plugin = function (element, options) {
         this.element = element;
         // jQuery has an extend method which merges the contents of two or
         // more objects, storing the result in the first object. The first object
@@ -35,7 +35,7 @@
         this._defaults = defaults;
         this._name = pluginName;
         this.init();
-    }
+    };
 
     Plugin.prototype = {
         init: function () {
@@ -46,19 +46,46 @@
             // you can add more functions like the one below and
             // call them like so: this.yourOtherFunction(this.element, this.options).
         },
+        // Set an option after initialization
+        option: function (options) {
+            if (typeof options === 'string') {
+                if (aguments.length = 1) {
+                    return this.options[options];
+                } else {
+                    options = {aguments[0]: aguments[1]};
+                }
+            }
+            $.extend(this.options, options);
+        },
         yourOtherFunction: function () {
             // some logic
         }
     };
-
-    // A really lightweight plugin wrapper around the constructor,
-    // preventing against multiple instantiations
+    
+    // A not so lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations and allowing other methods on
+    // the obect to be called after initialization.
     $.fn[pluginName] = function (options) {
-        return this.each(function () {
-            if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
-            }
-        });
+        if (options === 'init') {
+            options = Array.prototype.slice.call(arguments, 1);
+        }
+        if (options === undefined || typeof options === 'object') {
+            return this.each(function () {
+                if (!$.data(this, 'plugin_' + pluginName)) {
+                    $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
+                }
+            });
+        } else if (typeof options === 'string' && options[0] !== '_') {
+            return this.each(function () {
+                var instance = $.data(this, 'plugin_' + pluginName);
+                if (instance instanceof Plugin && typeof instance[options] === 'function') {
+                    instance[options].apply(instance, Array.prototype.slice.call(arguments, 1));
+                }
+            });
+        }
     };
+    
+    // Make the defaults globally configurable
+    $.fn[pluginName].defaults = defaults;
 
 })(jQuery, window, document);
