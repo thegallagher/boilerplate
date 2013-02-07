@@ -1,6 +1,6 @@
 # jQuery Boilerplate (modified)
 
-This version has been modifed to suite my own preferences.
+This version has been modifed to suite my own preferences. Note the coffee script version has not been changed.
 
 ### A boilerplate for jump-starting jQuery plugins development.
 
